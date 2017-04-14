@@ -1,0 +1,17 @@
+db:
+  image: couchdb
+  ports:
+    - "5984:5984"
+  environment:
+    - COUCHDB_USER=vanness
+    - COUCHDB_PASSWORD=123456
+
+app:
+  image: ibmcom/swift-ubuntu
+  ports:
+   - "8080:8080"
+  volumes:
+   - .:/root/GuessNumberAPI
+  command: bash -c "cd /root/GuessNumberAPI && swift package clean && swift build --configuration release && ./.build/release/GuessNumberServer"
+  links:
+    - db:localhost
